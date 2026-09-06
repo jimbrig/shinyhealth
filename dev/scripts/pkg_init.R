@@ -45,4 +45,6 @@ if (FALSE) {
 
 }
 
-
+if (FALSE) {
+  usethis::use_package_doc()
+}
