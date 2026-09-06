@@ -19,6 +19,8 @@ if (FALSE) {
   usethis::use_github()
   usethis::use_github_links()
 
+  usethis::use_mit_license(copyright_holder = "Jimmy Briggs <jimmy.briggs@jimbrig.com>")
+
   usethis::use_directory(".github", ignore = TRUE)
   usethis::use_git_ignore(c("*.html"), ".github")
   usethis::use_github_file(repo_spec = "noclocks/.github", path = ".github/dependabot.yml", save_as = ".github/dependabot.yml")
