@@ -10,3 +10,5 @@ Config/roxygen2/version: 8.1.0
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
+URL: https://github.com/jimbrig/shinyhealth
+BugReports: https://github.com/jimbrig/shinyhealth/issues
