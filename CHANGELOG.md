@@ -13,6 +13,10 @@
 - Implement initial package branding and setup scripts ([edf498a](https://github.com/jimbrig/shinyhealth/commit/edf498a8f2558ab16d1f5f5b5a21a22d195628de))  - (Jimmy Briggs)
 - Add automated changelog and dependency updates ([cfd9368](https://github.com/jimbrig/shinyhealth/commit/cfd93689c59bdbf6a065da7884770ce3cdd49abd))  - (Jimmy Briggs)
 
+## Meta
+
+- **config:** Finalize package metadata and devtool configurations ([fb2e1bb](https://github.com/jimbrig/shinyhealth/commit/fb2e1bb20bec9596849929975543335c73715bf8))  - (Jimmy Briggs)
+
 ## Testing
 
 - Set up testthat framework and initial unit test ([3938644](https://github.com/jimbrig/shinyhealth/commit/3938644fefc241e07fb7190afffede7408c1d274))  - (Jimmy Briggs)
