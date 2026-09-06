@@ -15,6 +15,21 @@ if (FALSE) {
 
   usethis::use_readme_md()
 
+  desc::desc_set(
+    "Title" = "Health Check Endpoints for 'Shiny' Applications",
+    "Description" = "Streamlines the ability to add basic health checking for shiny apps."
+  )
+
+  desc::desc_set_dep("R", type = "Depends", version = ">= 4.2.0")
+  desc::desc_set_dep("rlang", type = "Imports", version = ">= 1.1.0")
+  desc::desc_set_dep("shiny", type = "Imports", version = ">= 1.14.0")
+  desc::desc_set("Config/roxygen2/markdown", "TRUE")
+  desc::desc_set("Config/roxygen2/version", utils::packageVersion("roxygen2"))
+  desc::desc_set("Config/rcmdcheck/ignore-inconsequential-notes", "true")
+  desc::desc_set("Config/testthat/edition", "3")
+
+  desc::desc_normalize()
+
   usethis::use_git()
   usethis::use_github()
   usethis::use_github_links()

@@ -1,23 +1,28 @@
 Package: shinyhealth
-Title: What the Package Does (One Line, Title Case)
+Title: Health Check Endpoints for 'Shiny' Applications
 Version: 0.0.0.9000
 Authors@R: 
     person("Jimmy", "Briggs", , "jimmy.briggs@jimbrig.com", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-7489-8787"))
-Description: What the package does (one paragraph).
+Description: Streamlines the ability to add basic health checking for
+    shiny apps.
 License: MIT + file LICENSE
 URL: https://github.com/jimbrig/shinyhealth
 BugReports: https://github.com/jimbrig/shinyhealth/issues
+Depends: 
+    R (>= 4.2.0)
 Imports: 
     cli,
     crayon,
-    rlang,
-    shiny,
+    rlang (>= 1.1.0),
+    shiny (>= 1.14.0),
     utils
+Suggests: 
+    testthat (>= 3.0.0)
+Config/rcmdcheck/ignore-inconsequential-notes: true
+Config/roxygen2/markdown: TRUE
 Config/roxygen2/version: 8.1.0
+Config/testthat/edition: 3
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
