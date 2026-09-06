@@ -6,9 +6,13 @@ Authors@R:
            comment = c(ORCID = "0000-0002-7489-8787"))
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
+URL: https://github.com/jimbrig/shinyhealth
+BugReports: https://github.com/jimbrig/shinyhealth/issues
+Imports: 
+    cli,
+    rlang,
+    utils
 Config/roxygen2/version: 8.1.0
 Encoding: UTF-8
 Language: en-US
 Roxygen: list(markdown = TRUE)
-URL: https://github.com/jimbrig/shinyhealth
-BugReports: https://github.com/jimbrig/shinyhealth/issues
