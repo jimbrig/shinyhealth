@@ -13,7 +13,7 @@ health_response(
   ...,
   checks = NULL,
   status_code = 200L,
-  timestamp = ts(),
+  timestamp = ts_utc(),
   headers = list(),
   content_type = "application/health+json"
 )
@@ -46,7 +46,7 @@ Elements may be arbitrarily nested lists; their structure is not interpreted.}
 
 \item{status_code}{Integer HTTP status code between \code{100} and \code{599}. Default \code{200L}.}
 
-\item{timestamp}{Character timestamp for the body's \code{timestamp} field. Default \code{\link[=ts]{ts()}}.}
+\item{timestamp}{Character timestamp for the body's \code{timestamp} field. Default \code{\link[=ts_utc]{ts_utc()}}.}
 
 \item{headers}{Named list of HTTP headers merged over the defaults (caller wins).}
 
@@ -55,6 +55,15 @@ Elements may be arbitrarily nested lists; their structure is not interpreted.}
 \item{body}{Named list representing the structured response body (low-level constructor).}
 
 \item{x}{An object to coerce or test.}
+
+\item{arg}{An argument name as a string. This argument
+will be mentioned in error messages as the input that is at the
+origin of a problem.}
+
+\item{call}{The execution environment of a currently
+running function, e.g. \code{caller_env()}. The function will be
+mentioned in error messages as the source of the error. See the
+\code{call} argument of \code{\link[rlang:abort]{abort()}} for more information.}
 }
 \value{
 \itemize{
@@ -109,7 +118,7 @@ browser client on another origin needs access.
 \item The default content type is \code{application/health+json} per the IETF draft. The \code{+json} structured
 syntax suffix (RFC 6839) guarantees any JSON processor handles it; use \code{content_type} to override
 (e.g. plain \code{application/json}).
-\item Timestamps use RFC 3339 / ISO 8601 format in UTC (see \code{\link[=ts]{ts()}}).
+\item Timestamps use RFC 3339 / ISO 8601 format in UTC (see \code{\link[=ts_utc]{ts_utc()}}).
 }
 }
 }

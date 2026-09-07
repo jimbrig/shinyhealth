@@ -23,13 +23,8 @@ export(health_handler_default)
 export(health_response)
 export(healthcheck_paths)
 export(is_health_response)
-export(json_read)
-export(json_read_file)
-export(json_read_str)
-export(json_write_file)
-export(json_write_str)
 export(new_health_response)
-export(ts)
+export(ts_utc)
 export(validate_health_response)
 importFrom(cli,
   cli_abort,
@@ -42,8 +37,6 @@ importFrom(cli,
 importFrom(crayon,
   bold,
   cyan,
-  green,
-  italic,
   yellow
 )
 importFrom(rlang,

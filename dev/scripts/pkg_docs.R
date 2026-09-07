@@ -7,6 +7,13 @@
 #
 #  ------------------------------------------------------------------------
 
+attachment::att_amend_desc(use.config = TRUE, update.config = TRUE, path.c = "dev/config/attachment.config.yml")
+
+# readme ------------------------------------------------------------------
+
+if (FALSE) {
+
+}
 
 # vignettes ---------------------------------------------------------------
 
@@ -16,6 +23,7 @@ if (FALSE) {
 
 
 # pkgdown -----------------------------------------------------------------
+
 if (FALSE) {
   usethis::use_pkgdown_github_pages()
   file.rename(".github/workflows/pkgdown.yaml", ".github/workflows/pkgdown.yml")
@@ -25,6 +33,13 @@ if (FALSE) {
   fs::file_move("_pkgdown.yml", "pkgdown/_pkgdown.yml")
   pkgdown::build_favicons()
 }
+
+# badges ------------------------------------------------------------------
+
+if (FALSE) {
+  usethis::use_badge("DeepWiki", "https://deepwiki.com/jimbrig/shinyhealth", "https://deepwiki.com/badge.svg")
+}
+
 
 
 # experiemental -----------------------------------------------------------

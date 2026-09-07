@@ -123,9 +123,9 @@ test_that("str() summarizes the response structure", {
 
 # timestamps ------------------------------------------------------------------------------------------------------
 
-test_that("ts() formats times as rfc 3339 utc", {
-  expect_match(ts(), "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
+test_that("ts_utc() formats times as rfc 3339 utc", {
+  expect_match(ts_utc(), "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$")
 
   known <- as.POSIXct("2026-01-02 08:30:00", tz = "America/New_York")
-  expect_identical(ts(known), "2026-01-02T13:30:00Z")
+  expect_identical(ts_utc(known), "2026-01-02T13:30:00Z")
 })

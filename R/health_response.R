@@ -52,7 +52,7 @@
 #' - The default content type is `application/health+json` per the IETF draft. The `+json` structured
 #'   syntax suffix (RFC 6839) guarantees any JSON processor handles it; use `content_type` to override
 #'   (e.g. plain `application/json`).
-#' - Timestamps use RFC 3339 / ISO 8601 format in UTC (see [ts()]).
+#' - Timestamps use RFC 3339 / ISO 8601 format in UTC (see [ts_utc()]).
 #'
 #' @param status Character string reported as the body `status` field. Default `"pass"`.
 #' @param ... Additional named fields merged into the response body at the top level
@@ -60,11 +60,12 @@
 #' @param checks Optional named list of check results, serialized under the body's `checks` field.
 #'   Elements may be arbitrarily nested lists; their structure is not interpreted.
 #' @param status_code Integer HTTP status code between `100` and `599`. Default `200L`.
-#' @param timestamp Character timestamp for the body's `timestamp` field. Default [ts()].
+#' @param timestamp Character timestamp for the body's `timestamp` field. Default [ts_utc()].
 #' @param headers Named list of HTTP headers merged over the defaults (caller wins).
 #' @param content_type MIME type for the response. Default `"application/health+json"`.
 #' @param body Named list representing the structured response body (low-level constructor).
 #' @param x An object to coerce or test.
+#' @inheritParams rlang::args_error_context
 #'
 #' @returns
 #' - `health_response()`, `new_health_response()`, and `as_health_response()` return a `health_response`
@@ -99,7 +100,7 @@ health_response <- function(
   ...,
   checks = NULL,
   status_code = 200L,
-  timestamp = ts(),
+  timestamp = ts_utc(),
   headers = list(),
   content_type = "application/health+json"
 ) {
@@ -208,7 +209,7 @@ as_health_response.list <- function(x, ...) {
   check_named(x)
   status_code <- x[["status_code"]] %||% 200L
   x[["status_code"]] <- NULL
-  if (is.null(x[["timestamp"]])) x[["timestamp"]] <- ts()
+  if (is.null(x[["timestamp"]])) x[["timestamp"]] <- ts_utc()
   validate_health_response(
     new_health_response(
       body = x,
@@ -284,11 +285,13 @@ str.health_response <- function(object, ...) {
 
 # timestamps ------------------------------------------------------------------------------------------------------
 
-#' Timestamp
+#' UTC Timestamp
 #'
 #' @description
 #' Formats a time as an RFC 3339 / ISO 8601 timestamp in UTC (e.g. `"2026-09-06T21:15:30Z"`),
 #' the interchange format expected in machine-readable API responses.
+#'
+#' Named `ts_utc()` (rather than `ts()`) to avoid masking [stats::ts()].
 #'
 #' @param time A [POSIXct] time. Defaults to [Sys.time()].
 #'
@@ -298,8 +301,8 @@ str.health_response <- function(object, ...) {
 #' @export
 #'
 #' @examples
-#' ts()
-ts <- function(time = Sys.time()) {
+#' ts_utc()
+ts_utc <- function(time = Sys.time()) {
   format(time, format = "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
 }
 

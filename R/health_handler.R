@@ -48,5 +48,5 @@ health_handler_default <- function(req) {
 healthcheck_log <- function(req) {
   method <- req[["REQUEST_METHOD"]] %||% "<unknown>"
   path <- req[["PATH_INFO"]] %||% "<unknown>"
-  cli::cli_alert_info("[shinyhealth] {method} {path} ({ts()})")
+  cli::cli_alert_info("[shinyhealth] {method} {path} ({ts_utc()})")
 }

@@ -44,11 +44,17 @@ pkg_sys <- function(...) {
   system.file(..., package = pkg_name())
 }
 
+#' @keywords internal
+#' @noRd
+pkg_sys_shiny <- function(...) {
+  pkg_sys("shiny", ...)
+}
+
 # startup message -------------------------------------------------------------------------------------------------
 
 #' @keywords internal
 #' @noRd
-#' @importFrom crayon green cyan yellow bold italic
+#' @importFrom crayon bold cyan yellow
 pkg_startup_msg <- function() {
   msg_banner <- paste0(crayon::cyan(crayon::bold(pkg_banner())), "\n")
   msg_title <- paste0(crayon::bold(crayon::yellow(pkg_name(), paste0("v", pkg_version()))), "\n")

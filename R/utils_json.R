@@ -39,7 +39,6 @@ JSON_WRITE_STR_OPTS <- yyjsonr::opts_write_json(
 
 #' @keywords internal
 #' @noRd
-#' @export
 #' @importFrom yyjsonr read_json_file
 json_read_file <- function(path, opts = JSON_READ_OPTS, ...) {
   check_json_file(path)
@@ -48,7 +47,6 @@ json_read_file <- function(path, opts = JSON_READ_OPTS, ...) {
 
 #' @keywords internal
 #' @noRd
-#' @export
 #' @importFrom yyjsonr read_json_str
 json_read_str <- function(str, opts = JSON_READ_OPTS, ...) {
   check_json_str(str)
@@ -57,14 +55,13 @@ json_read_str <- function(str, opts = JSON_READ_OPTS, ...) {
 
 #' @keywords internal
 #' @noRd
-#' @export
 json_read <- function(x, ...) {
   UseMethod("json_read")
 }
 
 #' @keywords internal
 #' @noRd
-#' @export
+#' @exportS3Method
 json_read.character <- function(x, ...) {
   if (is_valid_json_file(x)) {
     json_read_file(x, ...)
@@ -77,16 +74,16 @@ json_read.character <- function(x, ...) {
 
 #' @keywords internal
 #' @noRd
-#' @export
 #' @importFrom yyjsonr read_json_raw
+#' @exportS3Method
 json_read.raw <- function(x, ...) {
   yyjsonr::read_json_raw(raw_vec = x, opts = JSON_READ_OPTS, ...)
 }
 
 #' @keywords internal
 #' @noRd
-#' @export
 #' @importFrom yyjsonr read_json_conn
+#' @exportS3Method
 json_read.url <- function(x, ...) {
   yyjsonr::read_json_conn(conn = x, opts = JSON_READ_OPTS, ...)
 }
@@ -95,7 +92,6 @@ json_read.url <- function(x, ...) {
 
 #' @keywords internal
 #' @noRd
-#' @export
 #' @importFrom yyjsonr write_json_str
 json_write_str <- function(x, ...) {
   yyjsonr::write_json_str(x = x, opts = JSON_WRITE_STR_OPTS, ...)
@@ -103,7 +99,6 @@ json_write_str <- function(x, ...) {
 
 #' @keywords internal
 #' @noRd
-#' @export
 #' @importFrom yyjsonr write_json_file
 json_write_file <- function(x, path, ...) {
   yyjsonr::write_json_file(x = x, filename = path, opts = JSON_WRITE_FILE_OPTS, ...)

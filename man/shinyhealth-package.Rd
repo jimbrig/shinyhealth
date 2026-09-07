@@ -13,6 +13,7 @@ health check (\verb{/health}) endpoint for R Shiny applications.
 Useful links:
 \itemize{
   \item \url{https://github.com/jimbrig/shinyhealth}
+  \item \url{http://docs.jimbrig.com/shinyhealth/}
   \item Report bugs at \url{https://github.com/jimbrig/shinyhealth/issues}
 }
 

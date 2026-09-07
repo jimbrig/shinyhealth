@@ -104,7 +104,7 @@ add_healthcheck <- function(
   registrations[[length(registrations) + 1L]] <- list(
     path = path,
     handler = handler_label,
-    registered_at = ts()
+    registered_at = ts_utc()
   )
   attr(app, "shinyhealth") <- registrations
 
