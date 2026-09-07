@@ -1,5 +1,9 @@
 # shinyhealth
 
+[![Automate
+Changelog](https://github.com/jimbrig/shinyhealth/actions/workflows/changelog.yml/badge.svg)](https://github.com/jimbrig/shinyhealth/actions/workflows/changelog.yml)
+[![pkgdown](https://github.com/jimbrig/shinyhealth/actions/workflows/pkgdown.yml/badge.svg)](https://github.com/jimbrig/shinyhealth/actions/workflows/pkgdown.yml)
+
 The goal of shinyhealth is to …
 
 ## Installation

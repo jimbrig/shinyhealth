@@ -9,6 +9,8 @@ Useful links:
 
 - <https://github.com/jimbrig/shinyhealth>
 
+- <http://docs.jimbrig.com/shinyhealth/>
+
 - Report bugs at <https://github.com/jimbrig/shinyhealth/issues>
 
 ## Author

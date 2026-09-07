@@ -79,7 +79,7 @@ response body is retained in the <code>body</code> attribute for printing, inspe
 <span>  <span class="va">...</span>,</span>
 <span>  checks <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  status_code <span class="op">=</span> <span class="fl">200L</span>,</span>
-<span>  timestamp <span class="op">=</span> <span class="fu"><a href="ts.html">ts</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  timestamp <span class="op">=</span> <span class="fu"><a href="ts_utc.html">ts_utc</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  headers <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  content_type <span class="op">=</span> <span class="st">"application/health+json"</span></span>
 <span><span class="op">)</span></span>
@@ -125,7 +125,7 @@ Elements may be arbitrarily nested lists; their structure is not interpreted.</p
 
 
 <dt id="arg-timestamp">timestamp<a class="anchor" aria-label="anchor" href="#arg-timestamp"></a></dt>
-<dd><p>Character timestamp for the body's <code>timestamp</code> field. Default <code><a href="ts.html">ts()</a></code>.</p></dd>
+<dd><p>Character timestamp for the body's <code>timestamp</code> field. Default <code><a href="ts_utc.html">ts_utc()</a></code>.</p></dd>
 
 
 <dt id="arg-headers">headers<a class="anchor" aria-label="anchor" href="#arg-headers"></a></dt>
@@ -142,6 +142,19 @@ Elements may be arbitrarily nested lists; their structure is not interpreted.</p
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
 <dd><p>An object to coerce or test.</p></dd>
+
+
+<dt id="arg-arg">arg<a class="anchor" aria-label="anchor" href="#arg-arg"></a></dt>
+<dd><p>An argument name as a string. This argument
+will be mentioned in error messages as the input that is at the
+origin of a problem.</p></dd>
+
+
+<dt id="arg-call">call<a class="anchor" aria-label="anchor" href="#arg-call"></a></dt>
+<dd><p>The execution environment of a currently
+running function, e.g. <code>caller_env()</code>. The function will be
+mentioned in error messages as the source of the error. See the
+<code>call</code> argument of <code><a href="https://rlang.r-lib.org/reference/abort.html" class="external-link">abort()</a></code> for more information.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -181,7 +194,7 @@ browser client on another origin needs access.</p></li>
 <li><p>The default content type is <code>application/health+json</code> per the IETF draft. The <code>+json</code> structured
 syntax suffix (RFC 6839) guarantees any JSON processor handles it; use <code>content_type</code> to override
 (e.g. plain <code>application/json</code>).</p></li>
-<li><p>Timestamps use RFC 3339 / ISO 8601 format in UTC (see <code><a href="ts.html">ts()</a></code>).</p></li>
+<li><p>Timestamps use RFC 3339 / ISO 8601 format in UTC (see <code><a href="ts_utc.html">ts_utc()</a></code>).</p></li>
 </ul></div>
 
     </div>

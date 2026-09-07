@@ -32,7 +32,7 @@ health_response(
   ...,
   checks = NULL,
   status_code = 200L,
-  timestamp = ts(),
+  timestamp = ts_utc(),
   headers = list(),
   content_type = "application/health+json"
 )
@@ -80,7 +80,7 @@ as_health_response(x, ...)
 - timestamp:
 
   Character timestamp for the body's `timestamp` field. Default
-  [`ts()`](http://docs.jimbrig.com/shinyhealth/reference/ts.md).
+  [`ts_utc()`](http://docs.jimbrig.com/shinyhealth/reference/ts_utc.md).
 
 - headers:
 
@@ -98,6 +98,19 @@ as_health_response(x, ...)
 - x:
 
   An object to coerce or test.
+
+- arg:
+
+  An argument name as a string. This argument will be mentioned in error
+  messages as the input that is at the origin of a problem.
+
+- call:
+
+  The execution environment of a currently running function, e.g.
+  `caller_env()`. The function will be mentioned in error messages as
+  the source of the error. See the `call` argument of
+  [`abort()`](https://rlang.r-lib.org/reference/abort.html) for more
+  information.
 
 ## Value
 
@@ -148,7 +161,7 @@ handler that builds the response.
   `application/json`).
 
 - Timestamps use RFC 3339 / ISO 8601 format in UTC (see
-  [`ts()`](http://docs.jimbrig.com/shinyhealth/reference/ts.md)).
+  [`ts_utc()`](http://docs.jimbrig.com/shinyhealth/reference/ts_utc.md)).
 
 ## Examples
 

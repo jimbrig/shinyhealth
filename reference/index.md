@@ -20,5 +20,5 @@
   [`is_health_response()`](http://docs.jimbrig.com/shinyhealth/reference/health_response.md)
   [`as_health_response()`](http://docs.jimbrig.com/shinyhealth/reference/health_response.md)
   : Health Check Response
-- [`ts()`](http://docs.jimbrig.com/shinyhealth/reference/ts.md) :
-  Timestamp
+- [`ts_utc()`](http://docs.jimbrig.com/shinyhealth/reference/ts_utc.md)
+  : UTC Timestamp

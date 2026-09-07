@@ -18,9 +18,4 @@ library(shinyhealth)
 #> 
 #> shinyhealth v0.0.0.9000
 #> Modern Package for Shiny App Health Checks
-#> 
-#> Attaching package: 'shinyhealth'
-#> The following object is masked from 'package:stats':
-#> 
-#>     ts
 ```
