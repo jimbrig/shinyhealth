@@ -39,7 +39,8 @@ adjustment is required and the endpoint works regardless of how the app was cons
 (plain \code{\link[shiny:shinyApp]{shiny::shinyApp()}}, golem, UI wrappers, etc.).
 
 Registrations stack: call \code{add_healthcheck()} multiple times with different paths to expose
-e.g. separate liveness (\verb{/livez}) and readiness (\verb{/readyz}) endpoints with their own handlers.
+e.g. separate \href{https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/}{liveness and readiness}
+endpoints (\verb{/livez}, \verb{/readyz}) with their own handlers.
 }
 \examples{
 app <- shiny::shinyApp(

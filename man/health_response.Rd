@@ -96,11 +96,14 @@ response body is retained in the \code{body} attribute for printing, inspection,
 
 The HTTP transport status (\code{status_code}) and the body \code{status} field are deliberately independent:
 \itemize{
-\item Orchestrators and load balancers (Kubernetes, Cloud Run, Azure Container Apps, etc.) interpret only
+\item Orchestrators and load balancers (\href{https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/}{Kubernetes},
+\href{https://cloud.google.com/run/docs/configuring/healthchecks}{Cloud Run},
+\href{https://learn.microsoft.com/en-us/azure/container-apps/health-probes}{Azure Container Apps}, etc.) interpret only
 the \emph{HTTP status code}: codes >= 200 and < 400 indicate success, anything else indicates failure.
 \item The body \code{status} string is a convention for humans and tooling. The default value (\code{"pass"}) follows
-the IETF health check response format draft (\code{draft-inadarei-api-health-check}, which also suggests
-\code{"warn"} and \code{"fail"}), but any value is accepted -- use whatever vocabulary fits your conventions.
+the \href{https://datatracker.ietf.org/doc/html/draft-inadarei-api-health-check}{IETF health check response format draft}
+(\code{draft-inadarei-api-health-check}, which also suggests \code{"warn"} and \code{"fail"}), but any value is
+accepted -- use whatever vocabulary fits your conventions.
 }
 
 The defaults compose into a healthy response (\code{status = "pass"}, \code{status_code = 200L}). For an
@@ -111,14 +114,15 @@ decided here -- that policy belongs to the handler that builds the response.
 
 \subsection{Headers, Content Type, & Timestamps}{
 \itemize{
-\item Default headers are \code{Cache-Control: no-store} (RFC 9111) so probe responses are never cached.
-The legacy \code{Pragma}/\code{Expires} response headers are deprecated by RFC 9111 and intentionally omitted.
-CORS headers are not sent by default (probes are server-to-server); supply them via \code{headers} if a
-browser client on another origin needs access.
+\item Default headers are \code{Cache-Control: no-store} (\href{https://www.rfc-editor.org/rfc/rfc9111}{RFC 9111})
+so probe responses are never cached. The legacy \code{Pragma}/\code{Expires} response headers are deprecated
+by RFC 9111 and intentionally omitted. CORS headers are not sent by default (probes are
+server-to-server); supply them via \code{headers} if a browser client on another origin needs access.
 \item The default content type is \code{application/health+json} per the IETF draft. The \code{+json} structured
-syntax suffix (RFC 6839) guarantees any JSON processor handles it; use \code{content_type} to override
-(e.g. plain \code{application/json}).
-\item Timestamps use RFC 3339 / ISO 8601 format in UTC (see \code{\link[=ts_utc]{ts_utc()}}).
+syntax suffix (\href{https://www.rfc-editor.org/rfc/rfc6839}{RFC 6839}) guarantees any JSON processor
+handles it; use \code{content_type} to override (e.g. plain \code{application/json}).
+\item Timestamps use \href{https://www.rfc-editor.org/rfc/rfc3339}{RFC 3339} / ISO 8601 format in UTC
+(see \code{\link[=ts_utc]{ts_utc()}}).
 }
 }
 }

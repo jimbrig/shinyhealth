@@ -2,3 +2,19 @@ url: http://docs.jimbrig.com/shinyhealth/
 template:
   bootstrap: 5
 
+reference:
+- title: Health Check Endpoints
+  desc: Register and introspect healthcheck endpoints on shiny apps.
+  contents:
+  - add_healthcheck
+  - health_handler_default
+  - has_healthcheck
+- title: Health Responses
+  desc: Create, validate, coerce, and inspect health response objects.
+  contents:
+  - health_response
+  - ts_utc
+- title: Validation Utilities
+  desc: Exported check helpers for class validation.
+  contents:
+  - check_inherits

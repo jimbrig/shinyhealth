@@ -13,8 +13,8 @@ ts_utc(time = Sys.time())
 A character string containing the formatted timestamp.
 }
 \description{
-Formats a time as an RFC 3339 / ISO 8601 timestamp in UTC (e.g. \code{"2026-09-06T21:15:30Z"}),
-the interchange format expected in machine-readable API responses.
+Formats a time as an \href{https://www.rfc-editor.org/rfc/rfc3339}{RFC 3339} / ISO 8601 timestamp in UTC
+(e.g. \code{"2026-09-06T21:15:30Z"}), the interchange format expected in machine-readable API responses.
 
 Named \code{ts_utc()} (rather than \code{ts()}) to avoid masking \code{\link[stats:ts]{stats::ts()}}.
 }
