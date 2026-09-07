@@ -186,3 +186,60 @@ check_request <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_en
 check_response <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_env()) {
   check_inherits(x, "httr2_response", arg = arg, call = call)
 }
+
+# scalars ---------------------------------------------------------------------------------------------------------
+
+#' @importFrom rlang is_string
+check_string <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_env()) {
+  if (!rlang::is_string(x)) {
+    check_abort("{.arg {arg}} must be a single string, not {.obj_type_friendly {x}}.", call = call)
+  }
+  invisible(x)
+}
+
+#' @importFrom rlang is_function
+check_function <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_env()) {
+  if (!rlang::is_function(x)) {
+    check_abort("{.arg {arg}} must be a function, not {.obj_type_friendly {x}}.", call = call)
+  }
+  invisible(x)
+}
+
+# http ------------------------------------------------------------------------------------------------------------
+
+#' @importFrom rlang is_integerish
+check_status_code <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_env()) {
+  if (!rlang::is_integerish(x, n = 1, finite = TRUE) || x < 100 || x > 599) {
+    check_abort(
+      "{.arg {arg}} must be a single HTTP status code between 100 and 599, not {.val {x}}.",
+      call = call
+    )
+  }
+  invisible(x)
+}
+
+check_url_path <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_env()) {
+  if (!is.character(x) || length(x) == 0 || !all(nzchar(x)) || !all(startsWith(x, "/"))) {
+    check_abort(
+      "{.arg {arg}} must be a character vector of URL paths, each beginning with {.val /}.",
+      call = call
+    )
+  }
+  invisible(x)
+}
+
+# json ------------------------------------------------------------------------------------------------------------
+
+check_json_str <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_env()) {
+  if (!is_valid_json_str(x)) {
+    check_abort("{.arg {arg}} must be a valid JSON string.", arg = arg, call = call)
+  }
+  invisible(x)
+}
+
+check_json_file <- function(x, arg = rlang::caller_arg(x), call = rlang::caller_env()) {
+  if (!is_valid_json_file(x)) {
+    check_abort("{.arg {arg}} must be a valid path to a JSON file.", arg = arg, call = call)
+  }
+  invisible(x)
+}

@@ -22,6 +22,7 @@
 
 ## usethis namespace: start
 #' @importFrom rlang caller_arg caller_env .data .env
+#' @importFrom rlang %||%
 #' @importFrom rlang new_environment empty_env on_load run_on_load local_use_cli
 #' @importFrom cli cli_abort cli_warn cli_inform
 ## usethis namespace: end
