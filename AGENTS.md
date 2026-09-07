@@ -35,7 +35,7 @@ inst/
   extdata/
     <example data to include>
   shiny/
-    <note however, that if the package has a primary purpose around shiny app(s) then it is likely best to keep that as functions in the package with a single run_app() or related entrypoint to call downstream app_ui()/server(), and mod_<name> shiny modules across the app(s), etc.>
+    <note however, that if the package has a primary purpose around shiny app(s) then it is likely best to keep that as functions in the package with a single run_app() or related entrypoint to call downstream app_ui()/server(), and mod_<name> shiny modules across the app(s), etc. or both>
     <standard for including shiny apps in packages similar to plumber2 apis, etc.>
     <appname>/
       app.R  # Depending on the use case for an app, it could include additional supporting files or even a Dockerfile as well
