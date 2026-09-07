@@ -38,6 +38,7 @@ if (FALSE) {
 
 if (FALSE) {
   usethis::use_badge("DeepWiki", "https://deepwiki.com/jimbrig/shinyhealth", "https://deepwiki.com/badge.svg")
+  usethis::use_badge("R Universe Version", "https://jimbrig.r-universe.dev/shinyhealth", "https://jimbrig.r-universe.dev/shinyhealth/badges/version")
 }
 
 
