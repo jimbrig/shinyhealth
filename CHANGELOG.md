@@ -8,6 +8,13 @@
 
 ## Documentation
 
+- **dev:** Document inst/ folder practices in AGENTS.md and update
+  pkg_docs script
+  ([63cada7](https://github.com/jimbrig/shinyhealth/commit/63cada79b50dea6ddefc6a7a16e45623152bbe28)) -
+  (Jimmy Briggs)
+- Update README with newly indexed DeepWiki integration
+  ([dc5dcd3](https://github.com/jimbrig/shinyhealth/commit/dc5dcd32609a02d64c3931123f44b0d206273ac6)) -
+  (Jimmy Briggs)
 - **pkgdown:** Refine documentation site and dev scripts
   ([2522e52](https://github.com/jimbrig/shinyhealth/commit/2522e5297cd36ff539345e4a21b4eb74463503b6)) -
   (Jimmy Briggs)
@@ -17,6 +24,9 @@
 
 ## Features
 
+- **examples:** Add packaged hello example app under inst/shiny
+  ([89456f0](https://github.com/jimbrig/shinyhealth/commit/89456f0a0af6650b4110c90b8f08a8860120da6c)) -
+  (Jimmy Briggs)
 - **healthcheck:** Implement comprehensive health check system
   ([06599d6](https://github.com/jimbrig/shinyhealth/commit/06599d6b2d563cccd0b0789d718c11094a837291)) -
   (Jimmy Briggs)
@@ -39,8 +49,17 @@
   ([fb2e1bb](https://github.com/jimbrig/shinyhealth/commit/fb2e1bb20bec9596849929975543335c73715bf8)) -
   (Jimmy Briggs)
 
+## Refactoring
+
+- **core:** Rename ts() to ts_utc() and internalize json utilities
+  ([2cb7a87](https://github.com/jimbrig/shinyhealth/commit/2cb7a87b9adef120eee42394f0ea1e22828a4a11)) -
+  (Jimmy Briggs)
+
 ## Testing
 
+- **wire:** Add live-server wire tests and cross-process probe test
+  ([42f27f1](https://github.com/jimbrig/shinyhealth/commit/42f27f1241f7af71a3db71425cffa8637f12c1c1)) -
+  (Jimmy Briggs)
 - **healthcheck:** Add comprehensive unit tests for health check system
   ([da44866](https://github.com/jimbrig/shinyhealth/commit/da4486666af1b33af6c3e735cb1ca665897ee1dd)) -
   (Jimmy Briggs)
