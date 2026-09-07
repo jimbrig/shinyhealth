@@ -8,6 +8,9 @@
 
 ## Documentation
 
+- Add r-universe badge to README
+  ([2a6a443](https://github.com/jimbrig/shinyhealth/commit/2a6a443da030604400db6bfd12019e2fdcd8297a)) -
+  (Jimmy Briggs)
 - Populate README, vignette, NEWS, and pkgdown reference for 0.0.1
   ([fce4f33](https://github.com/jimbrig/shinyhealth/commit/fce4f330470126c760a3554379a19ba455811943)) -
   (Jimmy Briggs)

@@ -28,5 +28,5 @@ A character string containing the formatted timestamp.
 
 ``` r
 ts_utc()
-#> [1] "2026-09-07T03:49:56Z"
+#> [1] "2026-09-07T03:55:00Z"
 ```

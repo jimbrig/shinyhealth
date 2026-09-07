@@ -6,21 +6,11 @@ Changelog](https://github.com/jimbrig/shinyhealth/actions/workflows/changelog.ym
 [![R Universe
 Version](https://jimbrig.r-universe.dev/shinyhealth/badges/version)](https://jimbrig.r-universe.dev/shinyhealth)
 
+## Overview
+
 `shinyhealth` provides best practice, production-grade health check
 endpoints for R [Shiny](https://shiny.posit.co/) applications with a
 single function call.
-
-Deployment platforms
-([Kubernetes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/),
-[Google Cloud
-Run](https://cloud.google.com/run/docs/configuring/healthchecks), [Azure
-Container
-Apps](https://learn.microsoft.com/en-us/azure/container-apps/health-probes),
-AWS load balancers, etc.) rely on HTTP health probes to decide whether
-your app is alive, ready for traffic, or needs a restart. Shiny has no
-native concept of a health endpoint – `shinyhealth` adds one without a
-plumber sidecar, a second port, or any changes to your UI or server
-code.
 
 See the [package documentation
 site](https://docs.jimbrig.com/shinyhealth/) for full reference and
@@ -35,6 +25,13 @@ You can install the development version of shinyhealth from
 
 # install.packages("pak")
 pak::pak("jimbrig/shinyhealth")
+```
+
+or via [R Universe](https://jimbrig.r-universe.dev/shinyhealth) with:
+
+``` r
+
+install.packages('shinyhealth', repos = c('https://jimbrig.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Usage
