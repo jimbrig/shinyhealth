@@ -60,6 +60,9 @@ if (FALSE) {
   usethis::use_git_ignore(c("mcp.env"), ".cursor")
   usethis::use_directory(".vscode", ignore = TRUE)
 
+  file.create(".Rprofile")
+  usethis::use_build_ignore(".Rprofile")
+
 }
 
 if (FALSE) {

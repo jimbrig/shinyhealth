@@ -1,0 +1,2 @@
+
+options("shinyhealth.banner" = TRUE)

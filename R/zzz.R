@@ -40,7 +40,9 @@ rlang::on_load({
 #' @keywords internal
 #' @noRd
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage(pkg_startup_msg())
+  if (getOption("shinyhealth.banner", default = FALSE)) {
+    packageStartupMessage(pkg_startup_msg())
+  }
 }
 
 # onUnload --------------------------------------------------------------------------------------------------------
