@@ -8,6 +8,9 @@
 
 ## Documentation
 
+- Populate README, vignette, NEWS, and pkgdown reference for 0.0.1
+  ([fce4f33](https://github.com/jimbrig/shinyhealth/commit/fce4f330470126c760a3554379a19ba455811943)) -
+  (Jimmy Briggs)
 - **dev:** Document inst/ folder practices in AGENTS.md and update
   pkg_docs script
   ([63cada7](https://github.com/jimbrig/shinyhealth/commit/63cada79b50dea6ddefc6a7a16e45623152bbe28)) -

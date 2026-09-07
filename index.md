@@ -3,6 +3,8 @@
 [![Automate
 Changelog](https://github.com/jimbrig/shinyhealth/actions/workflows/changelog.yml/badge.svg)](https://github.com/jimbrig/shinyhealth/actions/workflows/changelog.yml)
 [![pkgdown](https://github.com/jimbrig/shinyhealth/actions/workflows/pkgdown.yml/badge.svg)](https://github.com/jimbrig/shinyhealth/actions/workflows/pkgdown.yml)
+[![R Universe
+Version](https://jimbrig.r-universe.dev/shinyhealth/badges/version)](https://jimbrig.r-universe.dev/shinyhealth)
 
 `shinyhealth` provides best practice, production-grade health check
 endpoints for R [Shiny](https://shiny.posit.co/) applications with a
