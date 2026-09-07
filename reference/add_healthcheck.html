@@ -7,7 +7,8 @@ Because the interception happens on the app object's own handler, no uiPattern
 adjustment is required and the endpoint works regardless of how the app was constructed
 (plain shiny::shinyApp(), golem, UI wrappers, etc.).
 Registrations stack: call add_healthcheck() multiple times with different paths to expose
-e.g. separate liveness (/livez) and readiness (/readyz) endpoints with their own handlers."><meta property="og:description" content="Registers one or more healthcheck endpoints on a Shiny app by decorating the app object's
+e.g. separate liveness and readiness
+endpoints (/livez, /readyz) with their own handlers."><meta property="og:description" content="Registers one or more healthcheck endpoints on a Shiny app by decorating the app object's
 internal HTTP handler. Requests matching a registered path (via GET) are answered by
 handler before any UI rendering, session creation, or authentication occurs; all other
 requests fall through to the app unchanged.
@@ -15,7 +16,8 @@ Because the interception happens on the app object's own handler, no uiPattern
 adjustment is required and the endpoint works regardless of how the app was constructed
 (plain shiny::shinyApp(), golem, UI wrappers, etc.).
 Registrations stack: call add_healthcheck() multiple times with different paths to expose
-e.g. separate liveness (/livez) and readiness (/readyz) endpoints with their own handlers."><meta property="og:image" content="http://docs.jimbrig.com/shinyhealth/logo.png"></head><body>
+e.g. separate liveness and readiness
+endpoints (/livez, /readyz) with their own handlers."><meta property="og:image" content="http://docs.jimbrig.com/shinyhealth/logo.png"></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -33,6 +35,7 @@ e.g. separate liveness (/livez) and readiness (/readyz) endpoints with their own
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/shinyhealth.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/jimbrig/shinyhealth/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -57,7 +60,8 @@ requests fall through to the app unchanged.</p>
 adjustment is required and the endpoint works regardless of how the app was constructed
 (plain <code><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shiny::shinyApp()</a></code>, golem, UI wrappers, etc.).</p>
 <p>Registrations stack: call <code>add_healthcheck()</code> multiple times with different paths to expose
-e.g. separate liveness (<code>/livez</code>) and readiness (<code>/readyz</code>) endpoints with their own handlers.</p>
+e.g. separate <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" class="external-link">liveness and readiness</a>
+endpoints (<code>/livez</code>, <code>/readyz</code>) with their own handlers.</p>
     </div>
 
     <div class="section level2">

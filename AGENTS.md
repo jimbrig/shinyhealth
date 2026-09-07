@@ -78,3 +78,35 @@ inst/
   templates/**
   # etc.
 ```
+
+## Testing Practices
+
+Tests are organized in three tiers:
+
+1.  **Pure unit tests** (`test-health_response.R`): response
+    construction, serialization, validation. No request objects, no
+    server.
+2.  **App-object introspection tests** (`test-add_healthcheck.R`): what
+    [`add_healthcheck()`](http://docs.jimbrig.com/shinyhealth/reference/add_healthcheck.md)
+    does to the `shiny.appobj` (class, metadata attribute, handler
+    replacement, stacking). No server, and no fabricated shiny request
+    objects – request-shaped inputs are only ever exercised against a
+    real running app.
+3.  **Wire tests** (`test-wire.R`, `test-wire-process.R`): a live app
+    served via non-blocking
+    [`shiny::startApp()`](https://shiny.posit.co/r/reference/shiny/latest/startapp.html),
+    probed with real HTTP requests.
+
+IMPORTANT (wire tests): a synchronous
+[`httr2::req_perform()`](https://httr2.r-lib.org/reference/req_perform.html)
+against an app served by `startApp()` in the same R session will
+deadlock – curl blocks the only R thread, which is the same thread the
+`later` event loop needs to run the app’s HTTP handler. Requests must be
+performed as promises
+([`httr2::req_perform_promise()`](https://httr2.r-lib.org/reference/req_perform_promise.html))
+with the event loop pumped via
+[`later::run_now()`](https://later.r-lib.org/reference/run_now.html)
+until resolution. See `tests/testthat/helper.R` (`fetch_url()`). The
+cross-process variant (`test-wire-process.R`) runs the blocking client
+in a [`callr::r_bg()`](https://callr.r-lib.org/reference/r_bg.html)
+child process while the parent pumps the event loop to serve it.

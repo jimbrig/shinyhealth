@@ -13,8 +13,9 @@ how the app was constructed (plain
 golem, UI wrappers, etc.).
 
 Registrations stack: call `add_healthcheck()` multiple times with
-different paths to expose e.g. separate liveness (`/livez`) and
-readiness (`/readyz`) endpoints with their own handlers.
+different paths to expose e.g. separate [liveness and
+readiness](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+endpoints (`/livez`, `/readyz`) with their own handlers.
 
 ## Usage
 

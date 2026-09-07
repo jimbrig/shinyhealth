@@ -17,6 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/shinyhealth.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/jimbrig/shinyhealth/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -31,9 +32,9 @@
     </div>
 
     <div class="section level2">
-      <h2 id="all-functions">All functions<a class="anchor" aria-label="anchor" href="#all-functions"></a></h2>
+      <h2 id="health-check-endpoints">Health Check Endpoints<a class="anchor" aria-label="anchor" href="#health-check-endpoints"></a></h2>
 
-
+      <div class="section-desc"><p>Register and introspect healthcheck endpoints on shiny apps.</p></div>
 
       <dl></dl></div><div class="section level2">
 
@@ -49,10 +50,10 @@
 
         <dt>
 
-          <code><a href="check_inherits.html">check_inherits()</a></code> <code><a href="check_inherits.html">check_inherits2()</a></code> <code><a href="check_inherits.html">check_inherits_any()</a></code> <code><a href="check_inherits.html">check_inherits_all()</a></code>
+          <code><a href="health_handler_default.html">health_handler_default()</a></code>
 
         </dt>
-        <dd>Class Inheritance Checks</dd>
+        <dd>Default Healthcheck Handler</dd>
 
         <dt>
 
@@ -60,15 +61,17 @@
 
         </dt>
         <dd>Healthcheck Introspection</dd>
+      </dl></div><div class="section level2">
+      <h2 id="health-responses">Health Responses<a class="anchor" aria-label="anchor" href="#health-responses"></a></h2>
 
-        <dt>
+      <div class="section-desc"><p>Create, validate, coerce, and inspect health response objects.</p></div>
 
-          <code><a href="health_handler_default.html">health_handler_default()</a></code>
+      <dl></dl></div><div class="section level2">
 
-        </dt>
-        <dd>Default Healthcheck Handler</dd>
 
-        <dt>
+
+
+      <dl><dt>
 
           <code><a href="health_response.html">health_response()</a></code> <code><a href="health_response.html">new_health_response()</a></code> <code><a href="health_response.html">validate_health_response()</a></code> <code><a href="health_response.html">is_health_response()</a></code> <code><a href="health_response.html">as_health_response()</a></code>
 
@@ -81,8 +84,25 @@
 
         </dt>
         <dd>UTC Timestamp</dd>
+      </dl></div><div class="section level2">
+      <h2 id="validation-utilities">Validation Utilities<a class="anchor" aria-label="anchor" href="#validation-utilities"></a></h2>
+
+      <div class="section-desc"><p>Exported check helpers for class validation.</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="check_inherits.html">check_inherits()</a></code> <code><a href="check_inherits.html">check_inherits2()</a></code> <code><a href="check_inherits.html">check_inherits_any()</a></code> <code><a href="check_inherits.html">check_inherits_all()</a></code>
+
+        </dt>
+        <dd>Class Inheritance Checks</dd>
       </dl></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

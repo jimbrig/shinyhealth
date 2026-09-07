@@ -130,15 +130,22 @@ as_health_response(x, ...)
 The HTTP transport status (`status_code`) and the body `status` field
 are deliberately independent:
 
-- Orchestrators and load balancers (Kubernetes, Cloud Run, Azure
-  Container Apps, etc.) interpret only the *HTTP status code*: codes \>=
-  200 and \< 400 indicate success, anything else indicates failure.
+- Orchestrators and load balancers
+  ([Kubernetes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/),
+  [Cloud
+  Run](https://cloud.google.com/run/docs/configuring/healthchecks),
+  [Azure Container
+  Apps](https://learn.microsoft.com/en-us/azure/container-apps/health-probes),
+  etc.) interpret only the *HTTP status code*: codes \>= 200 and \< 400
+  indicate success, anything else indicates failure.
 
 - The body `status` string is a convention for humans and tooling. The
-  default value (`"pass"`) follows the IETF health check response format
-  draft (`draft-inadarei-api-health-check`, which also suggests `"warn"`
-  and `"fail"`), but any value is accepted – use whatever vocabulary
-  fits your conventions.
+  default value (`"pass"`) follows the [IETF health check response
+  format
+  draft](https://datatracker.ietf.org/doc/html/draft-inadarei-api-health-check)
+  (`draft-inadarei-api-health-check`, which also suggests `"warn"` and
+  `"fail"`), but any value is accepted – use whatever vocabulary fits
+  your conventions.
 
 The defaults compose into a healthy response (`status = "pass"`,
 `status_code = 200L`). For an unhealthy response, `503L` (Service
@@ -149,18 +156,21 @@ handler that builds the response.
 
 ### Headers, Content Type, & Timestamps
 
-- Default headers are `Cache-Control: no-store` (RFC 9111) so probe
-  responses are never cached. The legacy `Pragma`/`Expires` response
-  headers are deprecated by RFC 9111 and intentionally omitted. CORS
-  headers are not sent by default (probes are server-to-server); supply
-  them via `headers` if a browser client on another origin needs access.
+- Default headers are `Cache-Control: no-store` ([RFC
+  9111](https://www.rfc-editor.org/rfc/rfc9111)) so probe responses are
+  never cached. The legacy `Pragma`/`Expires` response headers are
+  deprecated by RFC 9111 and intentionally omitted. CORS headers are not
+  sent by default (probes are server-to-server); supply them via
+  `headers` if a browser client on another origin needs access.
 
 - The default content type is `application/health+json` per the IETF
-  draft. The `+json` structured syntax suffix (RFC 6839) guarantees any
-  JSON processor handles it; use `content_type` to override (e.g. plain
+  draft. The `+json` structured syntax suffix ([RFC
+  6839](https://www.rfc-editor.org/rfc/rfc6839)) guarantees any JSON
+  processor handles it; use `content_type` to override (e.g. plain
   `application/json`).
 
-- Timestamps use RFC 3339 / ISO 8601 format in UTC (see
+- Timestamps use [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339) /
+  ISO 8601 format in UTC (see
   [`ts_utc()`](http://docs.jimbrig.com/shinyhealth/reference/ts_utc.md)).
 
 ## Examples

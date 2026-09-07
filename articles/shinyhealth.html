@@ -36,6 +36,7 @@
       <ul class="navbar-nav me-auto">
 <li class="active nav-item"><a class="nav-link" href="../articles/shinyhealth.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -64,23 +65,215 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jimbrig/shinyhealth" class="external-link">shinyhealth</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt;          888      d8b                   888                        888 888    888</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt;          888      Y8P                   888                        888 888    888</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt;          888                            888                        888 888    888</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt; .d8888b  88888b.  888 88888b.  888  888 88888b.   .d88b.   8888b.  888 888888 88888b.</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt; 88K      888 "88b 888 888 "88b 888  888 888 "88b d8P  Y8b     "88b 888 888    888 "88b</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt; "Y8888b. 888  888 888 888  888 888  888 888  888 88888888 .d888888 888 888    888  888</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt;      X88 888  888 888 888  888 Y88b 888 888  888 Y8b.     888  888 888 Y88b.  888  888</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt;  88888P' 888  888 888 888  888  "Y88888 888  888  "Y8888  "Y888888 888  "Y888 888  888</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt;                                     888</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt;                                Y8b d88P</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt;                                 "Y88P"</span></span></span>
-<span><span class="co"><span style="color: #00BBBB; font-weight: bold;">#&gt; </span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">shinyhealth v0.0.0.9000</span></span></span>
-<span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Modern Package for Shiny App Health Checks</span></span></span></code></pre></div>
-  </main>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jimbrig/shinyhealth" class="external-link">shinyhealth</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="why-health-check-endpoints">Why health check endpoints?<a class="anchor" aria-label="anchor" href="#why-health-check-endpoints"></a>
+</h2>
+<p>Deployment platforms decide whether your application is working by
+probing an HTTP endpoint:</p>
+<ul>
+<li>
+<strong>Kubernetes</strong> uses <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" class="external-link">liveness
+and readiness probes</a>; any status code &gt;= 200 and &lt; 400 counts
+as success, anything else as failure.</li>
+<li>
+<strong><a href="https://cloud.google.com/run/docs/configuring/healthchecks" class="external-link">Google
+Cloud Run</a></strong>, <strong><a href="https://learn.microsoft.com/en-us/azure/container-apps/health-probes" class="external-link">Azure
+Container Apps</a></strong>, and <strong>AWS load balancers</strong>
+behave the same way – the HTTP status code is the contract.</li>
+</ul>
+<p>A failing liveness probe restarts your container; a failing readiness
+probe stops routing traffic to it. Shiny has no native concept of a
+health endpoint, and the common workarounds (wrapping the UI function,
+adjusting <code>uiPattern</code>, running a plumber sidecar) are easy to
+get wrong – a misconfigured <code>uiPattern</code> silently 404s every
+probe, and a health check behind an authentication wrapper bounces
+probes to a sign-in page.</p>
+<p><code>shinyhealth</code> solves this at the right layer: the app
+object’s own HTTP handler, where requests can be intercepted before any
+UI rendering, session creation, or authentication.</p>
+</div>
+<div class="section level2">
+<h2 id="adding-a-health-check">Adding a health check<a class="anchor" aria-label="anchor" href="#adding-a-health-check"></a>
+</h2>
+<p>Pipe any Shiny app object through <code><a href="../reference/add_healthcheck.html">add_healthcheck()</a></code>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span>  ui <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span><span class="st">"hello"</span><span class="op">)</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/add_healthcheck.html">add_healthcheck</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/has_healthcheck.html">has_healthcheck</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] TRUE</span></span>
+<span><span class="fu"><a href="../reference/has_healthcheck.html">healthcheck_paths</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "/health"</span></span></code></pre></div>
+<p>The decorated app answers <code>GET /health</code> with a JSON
+response and passes every other request through to your app unchanged.
+No <code>uiPattern</code> adjustment is needed, and construction method
+does not matter – plain <code><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shiny::shinyApp()</a></code>, golem, or apps
+wrapped by authentication packages like polished all work, because the
+interception happens after the app object is fully constructed.</p>
+<p>Probing the endpoint returns:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="ex">$</span> curl <span class="at">-i</span> http://127.0.0.1:8080/health</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="ex">HTTP/1.1</span> 200 OK</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="ex">Content-Type:</span> application/health+json</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="ex">Cache-Control:</span> no-store</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="dt">{</span><span class="st">"status"</span><span class="dt">:</span><span class="st">"pass"</span><span class="op">,</span><span class="st">"timestamp"</span><span class="dt">:</span><span class="st">"2026-09-06T23:00:17Z"</span><span class="dt">}</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="health-responses">Health responses<a class="anchor" aria-label="anchor" href="#health-responses"></a>
+</h2>
+<p><code><a href="../reference/health_response.html">health_response()</a></code> builds the response objects served
+from health endpoints. The defaults produce a healthy response:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/health_response.html">health_response</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>Two fields are deliberately independent:</p>
+<ul>
+<li>
+<strong><code>status_code</code></strong> (the HTTP transport
+status) is what orchestrators interpret. <code>200</code> means healthy;
+<code>503</code> (Service Unavailable) is the standard choice for
+unhealthy.</li>
+<li>
+<strong><code>status</code></strong> (the body field) is a
+convention for humans and tooling. The default vocabulary
+(<code>"pass"</code>, and by convention <code>"warn"</code> /
+<code>"fail"</code>) follows the <a href="https://datatracker.ietf.org/doc/html/draft-inadarei-api-health-check" class="external-link">IETF
+health check response format draft</a>, but any value is accepted.</li>
+</ul>
+<p>The response defaults follow the relevant standards: <a href="https://datatracker.ietf.org/doc/html/draft-inadarei-api-health-check" class="external-link"><code>application/health+json</code></a>
+content type (safe for any JSON consumer per <a href="https://www.rfc-editor.org/rfc/rfc6839" class="external-link">RFC 6839</a>’s
+<code>+json</code> suffix rule), <a href="https://www.rfc-editor.org/rfc/rfc9111" class="external-link"><code>Cache-Control: no-store</code></a>
+so probe responses are never cached, and <a href="https://www.rfc-editor.org/rfc/rfc3339" class="external-link">RFC 3339</a> UTC
+timestamps.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/health_response.html">health_response</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"fail"</span>, status_code <span class="op">=</span> <span class="fl">503L</span><span class="op">)</span></span></code></pre></div>
+<p>Additional named fields merge into the body, and <code>checks</code>
+carries arbitrarily nested check results:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/health_response.html">health_response</a></span><span class="op">(</span></span>
+<span>  version <span class="op">=</span> <span class="st">"1.0.0"</span>,</span>
+<span>  checks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>    database <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"pass"</span>, latency_ms <span class="op">=</span> <span class="fl">2.3</span><span class="op">)</span>,</span>
+<span>    upstream_api <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"warn"</span>, output <span class="op">=</span> <span class="st">"slow response times"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="the-handler-contract">The handler contract<a class="anchor" aria-label="anchor" href="#the-handler-contract"></a>
+</h2>
+<p>A handler is any function that accepts the request object and returns
+one of:</p>
+<ol style="list-style-type: decimal">
+<li>a <code><a href="../reference/health_response.html">health_response()</a></code>
+</li>
+<li>a plain <code><a href="https://rdrr.io/pkg/shiny/man/httpResponse.html" class="external-link">shiny::httpResponse()</a></code> (passed through
+untouched)</li>
+<li>a named list, treated as the complete response body – a
+<code>status_code</code> field, if present, controls the HTTP
+status</li>
+</ol>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">handler</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"degraded"</span>, status_code <span class="op">=</span> <span class="fl">503L</span>, reason <span class="op">=</span> <span class="st">"cache warming"</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/health_response.html">as_health_response</a></span><span class="op">(</span><span class="fu">handler</span><span class="op">(</span>req <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>If a handler throws an error, the endpoint stays machine-readable:
+the error is converted into a <code>503</code> response with
+<code>status = "fail"</code> and the condition message under
+<code>output</code>.</p>
+</div>
+<div class="section level2">
+<h2 id="liveness-and-readiness-endpoints">Liveness and readiness endpoints<a class="anchor" aria-label="anchor" href="#liveness-and-readiness-endpoints"></a>
+</h2>
+<p>Registrations stack, so separate endpoints with different handlers
+are just repeated calls:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">app</span> <span class="op">&lt;-</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html" class="external-link">shinyApp</a></span><span class="op">(</span></span>
+<span>  ui <span class="op">=</span> <span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/fluidPage.html" class="external-link">fluidPage</a></span><span class="op">(</span><span class="st">"hello"</span><span class="op">)</span>,</span>
+<span>  server <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">input</span>, <span class="va">output</span>, <span class="va">session</span><span class="op">)</span> <span class="op">{</span><span class="op">}</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/add_healthcheck.html">add_healthcheck</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/livez"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="../reference/add_healthcheck.html">add_healthcheck</a></span><span class="op">(</span>path <span class="op">=</span> <span class="st">"/readyz"</span>, handler <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">req</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="../reference/health_response.html">health_response</a></span><span class="op">(</span></span>
+<span>      checks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>database <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>status <span class="op">=</span> <span class="st">"pass"</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/has_healthcheck.html">healthcheck_paths</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "/livez"  "/readyz"</span></span></code></pre></div>
+<p>A common pattern: keep the liveness handler trivial (the default – if
+the process can answer, it is alive) and put dependency checks on the
+readiness endpoint, so a database blip stops traffic routing without
+triggering container restarts.</p>
+</div>
+<div class="section level2">
+<h2 id="console-feedback-during-development">Console feedback during development<a class="anchor" aria-label="anchor" href="#console-feedback-during-development"></a>
+</h2>
+<p><code><a href="../reference/add_healthcheck.html">add_healthcheck()</a></code>’s <code>verbose</code> argument
+(default: <a href="https://shiny.posit.co/r/reference/shiny/latest/devmode.html" class="external-link"><code>shiny::in_devmode()</code></a>)
+logs each probe hit to the console running the app. Enable <a href="https://shiny.posit.co/r/reference/shiny/latest/devmode.html" class="external-link">devmode</a>
+during development to watch probes arrive:</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/devmode.html" class="external-link">devmode</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="va">app</span><span class="op">)</span></span>
+<span><span class="co">#&gt; i [shinyhealth] GET /health (2026-09-06T23:00:17Z)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="configuring-platform-probes">Configuring platform probes<a class="anchor" aria-label="anchor" href="#configuring-platform-probes"></a>
+</h2>
+<p>With the endpoint in place, point your platform’s probes at it. <a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" class="external-link">Kubernetes</a>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">livenessProbe</span><span class="kw">:</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="at">  </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /livez</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="at">  </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">30</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">readinessProbe</span><span class="kw">:</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="at">  </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /readyz</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="at">  </span><span class="fu">periodSeconds</span><span class="kw">:</span><span class="at"> </span><span class="dv">10</span></span></code></pre></div>
+<p><a href="https://cloud.google.com/run/docs/configuring/healthchecks" class="external-link">Google
+Cloud Run</a> (<code>gcloud run services update</code> or service
+YAML):</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">startupProbe</span><span class="kw">:</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="at">  </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /health</span></span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">livenessProbe</span><span class="kw">:</span></span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="at">  </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="at">    </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /health</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="at">    </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span></code></pre></div>
+<p><a href="https://learn.microsoft.com/en-us/azure/container-apps/health-probes" class="external-link">Azure
+Container Apps</a> (bicep/ARM <code>probes</code> block or the
+portal):</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode yaml"><code class="sourceCode yaml"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">probes</span><span class="kw">:</span></span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Liveness</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="at">    </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="at">      </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /livez</span></span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="at">      </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="at">  </span><span class="kw">-</span><span class="at"> </span><span class="fu">type</span><span class="kw">:</span><span class="at"> Readiness</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="at">    </span><span class="fu">httpGet</span><span class="kw">:</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="at">      </span><span class="fu">path</span><span class="kw">:</span><span class="at"> /readyz</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="at">      </span><span class="fu">port</span><span class="kw">:</span><span class="at"> </span><span class="dv">8080</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="example-app">Example app<a class="anchor" aria-label="anchor" href="#example-app"></a>
+</h2>
+<p>A runnable example ships with the package:</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/runApp.html" class="external-link">runApp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"shiny"</span>, <span class="st">"hello"</span>, package <span class="op">=</span> <span class="st">"shinyhealth"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>It exposes <code>/health</code> (default handler) and
+<code>/readyz</code> (custom handler with checks) – open either path in
+a browser or probe them with curl while the app runs.</p>
+<!-- links: start -->
+<!-- links: end -->
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

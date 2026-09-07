@@ -17,6 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="articles/shinyhealth.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/jimbrig/shinyhealth/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -94,6 +95,17 @@
   reports/quarto/**
   templates/**
   # etc.</code></pre>
+</div>
+<div class="section level2">
+<h2 id="testing-practices">Testing Practices<a class="anchor" aria-label="anchor" href="#testing-practices"></a></h2>
+<p>Tests are organized in three tiers:</p>
+<ol style="list-style-type: decimal"><li>
+<strong>Pure unit tests</strong> (<code>test-health_response.R</code>): response construction, serialization, validation. No request objects, no server.</li>
+<li>
+<strong>App-object introspection tests</strong> (<code>test-add_healthcheck.R</code>): what <code><a href="reference/add_healthcheck.html">add_healthcheck()</a></code> does to the <code>shiny.appobj</code> (class, metadata attribute, handler replacement, stacking). No server, and no fabricated shiny request objects – request-shaped inputs are only ever exercised against a real running app.</li>
+<li>
+<strong>Wire tests</strong> (<code>test-wire.R</code>, <code>test-wire-process.R</code>): a live app served via non-blocking <a href="https://shiny.posit.co/r/reference/shiny/latest/startapp.html" class="external-link"><code>shiny::startApp()</code></a>, probed with real HTTP requests.</li>
+</ol><p>IMPORTANT (wire tests): a synchronous <code><a href="https://httr2.r-lib.org/reference/req_perform.html" class="external-link">httr2::req_perform()</a></code> against an app served by <code>startApp()</code> in the same R session will deadlock – curl blocks the only R thread, which is the same thread the <code>later</code> event loop needs to run the app’s HTTP handler. Requests must be performed as promises (<code><a href="https://httr2.r-lib.org/reference/req_perform_promise.html" class="external-link">httr2::req_perform_promise()</a></code>) with the event loop pumped via <code><a href="https://later.r-lib.org/reference/run_now.html" class="external-link">later::run_now()</a></code> until resolution. See <code>tests/testthat/helper.R</code> (<code>fetch_url()</code>). The cross-process variant (<code>test-wire-process.R</code>) runs the blocking client in a <code><a href="https://callr.r-lib.org/reference/r_bg.html" class="external-link">callr::r_bg()</a></code> child process while the parent pumps the event loop to serve it.</p>
 </div>
 
 

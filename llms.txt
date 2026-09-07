@@ -4,12 +4,30 @@
 Changelog](https://github.com/jimbrig/shinyhealth/actions/workflows/changelog.yml/badge.svg)](https://github.com/jimbrig/shinyhealth/actions/workflows/changelog.yml)
 [![pkgdown](https://github.com/jimbrig/shinyhealth/actions/workflows/pkgdown.yml/badge.svg)](https://github.com/jimbrig/shinyhealth/actions/workflows/pkgdown.yml)
 
-The goal of shinyhealth is to …
+`shinyhealth` provides best practice, production-grade health check
+endpoints for R [Shiny](https://shiny.posit.co/) applications with a
+single function call.
+
+Deployment platforms
+([Kubernetes](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/),
+[Google Cloud
+Run](https://cloud.google.com/run/docs/configuring/healthchecks), [Azure
+Container
+Apps](https://learn.microsoft.com/en-us/azure/container-apps/health-probes),
+AWS load balancers, etc.) rely on HTTP health probes to decide whether
+your app is alive, ready for traffic, or needs a restart. Shiny has no
+native concept of a health endpoint – `shinyhealth` adds one without a
+plumber sidecar, a second port, or any changes to your UI or server
+code.
+
+See the [package documentation
+site](https://docs.jimbrig.com/shinyhealth/) for full reference and
+articles.
 
 ## Installation
 
 You can install the development version of shinyhealth from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/jimbrig/shinyhealth) with:
 
 ``` r
 
@@ -17,32 +35,94 @@ You can install the development version of shinyhealth from
 pak::pak("jimbrig/shinyhealth")
 ```
 
-## Example
+## Usage
 
-This is a basic example which shows you how to solve a common problem:
+Pipe any Shiny app object through
+[`add_healthcheck()`](https://docs.jimbrig.com/shinyhealth/reference/add_healthcheck.html):
 
 ``` r
 
+library(shiny)
 library(shinyhealth)
-## basic example code
+
+shinyApp(ui = fluidPage("hello"), server = function(input, output, session) {}) |>
+  add_healthcheck()
 ```
+
+That’s it. The app now answers `GET /health` before any UI rendering,
+session creation, or authentication occurs:
+
+``` sh
+$ curl -i http://127.0.0.1:8080/health
+HTTP/1.1 200 OK
+Content-Type: application/health+json
+Cache-Control: no-store
+
+{"status":"pass","timestamp":"2026-09-06T23:00:17Z"}
+```
+
+All other requests fall through to your app unchanged – no `uiPattern`
+adjustments required, and it works regardless of how the app was
+constructed (plain
+[`shinyApp()`](https://rdrr.io/pkg/shiny/man/shinyApp.html),
+[golem](https://thinkr-open.github.io/golem/), authentication wrappers
+like [polished](https://polished.tech/), etc.).
+
+### Custom handlers and multiple endpoints
+
+Registrations stack, and handlers are plain functions of the request
+(see
+[`health_response()`](https://docs.jimbrig.com/shinyhealth/reference/health_response.html)
+and the handler contract in
+[`health_handler_default()`](https://docs.jimbrig.com/shinyhealth/reference/health_handler_default.html)):
+
+``` r
+
+shinyApp(ui, server) |>
+  add_healthcheck(path = "/livez") |>
+  add_healthcheck(path = "/readyz", handler = function(req) {
+    health_response(
+      version = "1.0.0",
+      checks = list(
+        database = list(status = "pass", latency_ms = 2.3),
+        upstream_api = list(status = "pass")
+      )
+    )
+  })
+```
+
+Handler errors never break the endpoint – they are converted into a
+machine-readable `503` response with `status: "fail"`.
+
+### Learn more
+
+- The [Getting Started
+  vignette](https://docs.jimbrig.com/shinyhealth/articles/shinyhealth.html)
+  walks through the full handler contract, status semantics, and
+  deployment probe configuration for common platforms.
+- A runnable [example
+  app](https://github.com/jimbrig/shinyhealth/blob/main/inst/shiny/hello/app.R)
+  ships with the package:
+  `shiny::runApp(system.file("shiny", "hello", package = "shinyhealth"))`
 
 # Package index
 
-## All functions
+## Health Check Endpoints
+
+Register and introspect healthcheck endpoints on shiny apps.
 
 - [`add_healthcheck()`](http://docs.jimbrig.com/shinyhealth/reference/add_healthcheck.md)
   : Add a Health Check to a Shiny App
-- [`check_inherits()`](http://docs.jimbrig.com/shinyhealth/reference/check_inherits.md)
-  [`check_inherits2()`](http://docs.jimbrig.com/shinyhealth/reference/check_inherits.md)
-  [`check_inherits_any()`](http://docs.jimbrig.com/shinyhealth/reference/check_inherits.md)
-  [`check_inherits_all()`](http://docs.jimbrig.com/shinyhealth/reference/check_inherits.md)
-  : Class Inheritance Checks
+- [`health_handler_default()`](http://docs.jimbrig.com/shinyhealth/reference/health_handler_default.md)
+  : Default Healthcheck Handler
 - [`has_healthcheck()`](http://docs.jimbrig.com/shinyhealth/reference/has_healthcheck.md)
   [`healthcheck_paths()`](http://docs.jimbrig.com/shinyhealth/reference/has_healthcheck.md)
   : Healthcheck Introspection
-- [`health_handler_default()`](http://docs.jimbrig.com/shinyhealth/reference/health_handler_default.md)
-  : Default Healthcheck Handler
+
+## Health Responses
+
+Create, validate, coerce, and inspect health response objects.
+
 - [`health_response()`](http://docs.jimbrig.com/shinyhealth/reference/health_response.md)
   [`new_health_response()`](http://docs.jimbrig.com/shinyhealth/reference/health_response.md)
   [`validate_health_response()`](http://docs.jimbrig.com/shinyhealth/reference/health_response.md)
@@ -51,6 +131,16 @@ library(shinyhealth)
   : Health Check Response
 - [`ts_utc()`](http://docs.jimbrig.com/shinyhealth/reference/ts_utc.md)
   : UTC Timestamp
+
+## Validation Utilities
+
+Exported check helpers for class validation.
+
+- [`check_inherits()`](http://docs.jimbrig.com/shinyhealth/reference/check_inherits.md)
+  [`check_inherits2()`](http://docs.jimbrig.com/shinyhealth/reference/check_inherits.md)
+  [`check_inherits_any()`](http://docs.jimbrig.com/shinyhealth/reference/check_inherits.md)
+  [`check_inherits_all()`](http://docs.jimbrig.com/shinyhealth/reference/check_inherits.md)
+  : Class Inheritance Checks
 
 # Articles
 

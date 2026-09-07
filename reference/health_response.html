@@ -43,6 +43,7 @@ response body is retained in the body attribute for printing, inspection, and te
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/shinyhealth.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/jimbrig/shinyhealth/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -173,11 +174,14 @@ object (a classed <code><a href="https://rdrr.io/pkg/shiny/man/httpResponse.html
 <h3 id="status-semantics">Status Semantics<a class="anchor" aria-label="anchor" href="#status-semantics"></a></h3>
 
 
-<p>The HTTP transport status (<code>status_code</code>) and the body <code>status</code> field are deliberately independent:</p><ul><li><p>Orchestrators and load balancers (Kubernetes, Cloud Run, Azure Container Apps, etc.) interpret only
+<p>The HTTP transport status (<code>status_code</code>) and the body <code>status</code> field are deliberately independent:</p><ul><li><p>Orchestrators and load balancers (<a href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" class="external-link">Kubernetes</a>,
+<a href="https://cloud.google.com/run/docs/configuring/healthchecks" class="external-link">Cloud Run</a>,
+<a href="https://learn.microsoft.com/en-us/azure/container-apps/health-probes" class="external-link">Azure Container Apps</a>, etc.) interpret only
 the <em>HTTP status code</em>: codes &gt;= 200 and &lt; 400 indicate success, anything else indicates failure.</p></li>
 <li><p>The body <code>status</code> string is a convention for humans and tooling. The default value (<code>"pass"</code>) follows
-the IETF health check response format draft (<code>draft-inadarei-api-health-check</code>, which also suggests
-<code>"warn"</code> and <code>"fail"</code>), but any value is accepted – use whatever vocabulary fits your conventions.</p></li>
+the <a href="https://datatracker.ietf.org/doc/html/draft-inadarei-api-health-check" class="external-link">IETF health check response format draft</a>
+(<code>draft-inadarei-api-health-check</code>, which also suggests <code>"warn"</code> and <code>"fail"</code>), but any value is
+accepted – use whatever vocabulary fits your conventions.</p></li>
 </ul><p>The defaults compose into a healthy response (<code>status = "pass"</code>, <code>status_code = 200L</code>). For an
 unhealthy response, <code>503L</code> (Service Unavailable) is the standard choice, typically paired with
 <code>status = "fail"</code>. How individual <code>checks</code> aggregate into an overall status is intentionally <em>not</em>
@@ -187,14 +191,15 @@ decided here – that policy belongs to the handler that builds the response.</p
 <div class="section">
 <h3 id="headers-content-type-amp-timestamps">Headers, Content Type, &amp; Timestamps<a class="anchor" aria-label="anchor" href="#headers-content-type-amp-timestamps"></a></h3>
 
-<ul><li><p>Default headers are <code>Cache-Control: no-store</code> (RFC 9111) so probe responses are never cached.
-The legacy <code>Pragma</code>/<code>Expires</code> response headers are deprecated by RFC 9111 and intentionally omitted.
-CORS headers are not sent by default (probes are server-to-server); supply them via <code>headers</code> if a
-browser client on another origin needs access.</p></li>
+<ul><li><p>Default headers are <code>Cache-Control: no-store</code> (<a href="https://www.rfc-editor.org/rfc/rfc9111" class="external-link">RFC 9111</a>)
+so probe responses are never cached. The legacy <code>Pragma</code>/<code>Expires</code> response headers are deprecated
+by RFC 9111 and intentionally omitted. CORS headers are not sent by default (probes are
+server-to-server); supply them via <code>headers</code> if a browser client on another origin needs access.</p></li>
 <li><p>The default content type is <code>application/health+json</code> per the IETF draft. The <code>+json</code> structured
-syntax suffix (RFC 6839) guarantees any JSON processor handles it; use <code>content_type</code> to override
-(e.g. plain <code>application/json</code>).</p></li>
-<li><p>Timestamps use RFC 3339 / ISO 8601 format in UTC (see <code><a href="ts_utc.html">ts_utc()</a></code>).</p></li>
+syntax suffix (<a href="https://www.rfc-editor.org/rfc/rfc6839" class="external-link">RFC 6839</a>) guarantees any JSON processor
+handles it; use <code>content_type</code> to override (e.g. plain <code>application/json</code>).</p></li>
+<li><p>Timestamps use <a href="https://www.rfc-editor.org/rfc/rfc3339" class="external-link">RFC 3339</a> / ISO 8601 format in UTC
+(see <code><a href="ts_utc.html">ts_utc()</a></code>).</p></li>
 </ul></div>
 
     </div>

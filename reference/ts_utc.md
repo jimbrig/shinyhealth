@@ -1,8 +1,8 @@
 # UTC Timestamp
 
-Formats a time as an RFC 3339 / ISO 8601 timestamp in UTC (e.g.
-`"2026-09-06T21:15:30Z"`), the interchange format expected in
-machine-readable API responses.
+Formats a time as an [RFC 3339](https://www.rfc-editor.org/rfc/rfc3339)
+/ ISO 8601 timestamp in UTC (e.g. `"2026-09-06T21:15:30Z"`), the
+interchange format expected in machine-readable API responses.
 
 Named `ts_utc()` (rather than [`ts()`](https://rdrr.io/r/stats/ts.html))
 to avoid masking [`stats::ts()`](https://rdrr.io/r/stats/ts.html).
@@ -28,5 +28,5 @@ A character string containing the formatted timestamp.
 
 ``` r
 ts_utc()
-#> [1] "2026-09-07T03:15:23Z"
+#> [1] "2026-09-07T03:37:48Z"
 ```

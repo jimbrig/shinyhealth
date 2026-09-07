@@ -24,6 +24,10 @@
 
 ## Features
 
+- Make startup banner and message disabled by default but enabled for
+  development
+  ([03406a3](https://github.com/jimbrig/shinyhealth/commit/03406a3f3ab8c842dcd50327310111121a27cd27)) -
+  (Jimmy Briggs)
 - **examples:** Add packaged hello example app under inst/shiny
   ([89456f0](https://github.com/jimbrig/shinyhealth/commit/89456f0a0af6650b4110c90b8f08a8860120da6c)) -
   (Jimmy Briggs)
