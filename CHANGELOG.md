@@ -8,6 +8,7 @@
 
 ## Documentation
 
+- Populate README, vignette, NEWS, and pkgdown reference for 0.0.1 ([fce4f33](https://github.com/jimbrig/shinyhealth/commit/fce4f330470126c760a3554379a19ba455811943))  - (Jimmy Briggs)
 - **dev:** Document inst/ folder practices in AGENTS.md and update pkg_docs script ([63cada7](https://github.com/jimbrig/shinyhealth/commit/63cada79b50dea6ddefc6a7a16e45623152bbe28))  - (Jimmy Briggs)
 - Update README with newly indexed DeepWiki integration ([dc5dcd3](https://github.com/jimbrig/shinyhealth/commit/dc5dcd32609a02d64c3931123f44b0d206273ac6))  - (Jimmy Briggs)
 - **pkgdown:** Refine documentation site and dev scripts ([2522e52](https://github.com/jimbrig/shinyhealth/commit/2522e5297cd36ff539345e4a21b4eb74463503b6))  - (Jimmy Briggs)
