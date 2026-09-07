@@ -12,12 +12,26 @@
 
 if (FALSE) {
   c(
+    # aaa & zzz
     "aaa",
     "zzz",
+    # package core systems
+    "shinyhealth-conditions",
+    # "shinyhealth-options",
+    # "shinyhealth-config",
+
+    # "modules"
+    "health_check",
+    "health_response",
+    # "health_"
     "add_healthcheck",
+
+    # utils
     "utils_pkg",
     "utils_checks",
-    "shinyhealth-conditions"
+    "utils_json"
+
+
   ) |>
     purrr::walk(usethis::use_r, open = FALSE)
 }

@@ -7,10 +7,36 @@
 #
 #  ------------------------------------------------------------------------
 
+
+# vignettes ---------------------------------------------------------------
+
 if (FALSE) {
   usethis::use_vignette("shinyhealth", title = "Getting Started")
-  pkgnet::CreatePackageVignette()
+}
+
+
+# pkgdown -----------------------------------------------------------------
+if (FALSE) {
   usethis::use_pkgdown_github_pages()
   file.rename(".github/workflows/pkgdown.yaml", ".github/workflows/pkgdown.yml")
   usethis::use_badge("pkgdown", "https://github.com/jimbrig/shinyhealth/actions/workflows/pkgdown.yml", "https://github.com/jimbrig/shinyhealth/actions/workflows/pkgdown.yml/badge.svg")
+
+  usethis::use_directory("pkgdown", ignore = TRUE)
+  fs::file_move("_pkgdown.yml", "pkgdown/_pkgdown.yml")
+  pkgdown::build_favicons()
 }
+
+
+# experiemental -----------------------------------------------------------
+
+# i'm using this package to experiement with some interesting enhanced forms
+# of docs and related:
+
+# pkgnet - may remove, though could be useful for context
+if (FALSE) {
+  pkgnet::CreatePackageVignette(pkg = getwd(), pkg_reporters = list(pkgnet::DependencyReporter$new(), pkgnet::FunctionReporter$new()), vignette_path = file.path(getwd(), "dev/docs/pkgnet-report.Rmd"))
+  rmarkdown::render("dev/docs/pkgnet-report.Rmd")
+  browseURL("dev/docs/pkgnet-report.html")
+}
+# ^ definitely has the right idea - very useful information - bad interface and presentation though
+# should circle back on this as something to do myself (pkgdev package)

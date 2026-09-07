@@ -53,7 +53,7 @@ pkg_startup_msg <- function() {
   msg_banner <- paste0(crayon::cyan(crayon::bold(pkg_banner())), "\n")
   msg_title <- paste0(crayon::bold(crayon::yellow(pkg_name(), paste0("v", pkg_version()))), "\n")
   msg_desc <- crayon::bold(crayon::yellow("Modern Package for Shiny App Health Checks"))
-  paste0(msg_banner, msg_title, msg_desc)
+  invisible(paste0(msg_banner, msg_title, msg_desc))
 }
 
 # environment -----------------------------------------------------------------------------------------------------
