@@ -4,23 +4,59 @@
 \alias{add_healthcheck}
 \title{Add a Health Check to a Shiny App}
 \usage{
-add_healthcheck(app, path = "/health")
+add_healthcheck(
+  app,
+  path = "/health",
+  handler = health_handler_default,
+  verbose = shiny::in_devmode()
+)
 }
 \arguments{
-\item{app}{The Shiny app object.}
+\item{app}{A shiny application object, typically created using \code{\link[shiny:shinyApp]{shiny::shinyApp()}}.}
 
-\item{path}{The URL path for the health check endpoint (default is \verb{/health}).}
+\item{path}{Character vector of URL paths to register (each must begin with \code{/}).
+Default \code{"/health"}.}
+
+\item{handler}{A healthcheck handler: a function of \code{req} returning a \code{\link[=health_response]{health_response()}},
+a \code{\link[shiny:httpResponse]{shiny::httpResponse()}}, or a named list. See \code{\link[=health_handler_default]{health_handler_default()}} for the full
+contract. Errors thrown by the handler are converted into a \code{503} "fail" response.}
+
+\item{verbose}{Logical; log a console message for each healthcheck request received.
+Evaluated once at registration time. Defaults to \code{\link[shiny:in_devmode]{shiny::in_devmode()}}.}
 }
 \value{
-The modified \code{shiny.appobj} object with the updated internal \code{httpHandler}
-function for handling health check requests.
+The modified app object, classed \code{c("shinyhealth_app", "shiny.appobj")}, with registration
+metadata stored in the \code{shinyhealth} attribute.
 }
 \description{
-Adds a health check endpoint to a Shiny app.
+Registers one or more healthcheck endpoints on a Shiny app by decorating the app object's
+internal HTTP handler. Requests matching a registered \code{path} (via \code{GET}) are answered by
+\code{handler} before any UI rendering, session creation, or authentication occurs; all other
+requests fall through to the app unchanged.
+
+Because the interception happens on the app object's own handler, no \code{uiPattern}
+adjustment is required and the endpoint works regardless of how the app was constructed
+(plain \code{\link[shiny:shinyApp]{shiny::shinyApp()}}, golem, UI wrappers, etc.).
+
+Registrations stack: call \code{add_healthcheck()} multiple times with different paths to expose
+e.g. separate liveness (\verb{/livez}) and readiness (\verb{/readyz}) endpoints with their own handlers.
 }
 \examples{
-\dontrun{
-myapp <- shiny::shinyApp(ui = shiny::fluidPage("hi"), server = function(input, output, session) {})
-myapp |> add_healthcheck()
+app <- shiny::shinyApp(
+  ui = shiny::fluidPage("hello"),
+  server = function(input, output, session) {}
+)
+
+app <- add_healthcheck(app)
+has_healthcheck(app)
+healthcheck_paths(app)
+
+# stack a second endpoint with a custom handler
+app <- add_healthcheck(app, path = "/readyz", handler = function(req) {
+  health_response(checks = list(database = list(status = "pass")))
+})
+healthcheck_paths(app)
 }
+\seealso{
+\code{\link[=health_response]{health_response()}}, \code{\link[=health_handler_default]{health_handler_default()}}, \code{\link[=has_healthcheck]{has_healthcheck()}}, \code{\link[=healthcheck_paths]{healthcheck_paths()}}
 }
