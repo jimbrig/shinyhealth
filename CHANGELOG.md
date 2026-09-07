@@ -8,6 +8,7 @@
 
 ## Documentation
 
+- **pkgdown:** Refine documentation site and dev scripts ([2522e52](https://github.com/jimbrig/shinyhealth/commit/2522e5297cd36ff539345e4a21b4eb74463503b6))  - (Jimmy Briggs)
 - **pkgdown:** Set up automated package documentation site ([f4c5e01](https://github.com/jimbrig/shinyhealth/commit/f4c5e0137b72e9c491529e9feb6aee3085d76b6d))  - (Jimmy Briggs)
 
 ## Features
