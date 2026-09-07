@@ -8,6 +8,7 @@
 
 ## Documentation
 
+- Update installation and README ([adb175f](https://github.com/jimbrig/shinyhealth/commit/adb175ff6893335cb70a75a7724916b0ebf1ef77))  - (Jimmy Briggs)
 - Add r-universe badge to README ([2a6a443](https://github.com/jimbrig/shinyhealth/commit/2a6a443da030604400db6bfd12019e2fdcd8297a))  - (Jimmy Briggs)
 - Populate README, vignette, NEWS, and pkgdown reference for 0.0.1 ([fce4f33](https://github.com/jimbrig/shinyhealth/commit/fce4f330470126c760a3554379a19ba455811943))  - (Jimmy Briggs)
 - **dev:** Document inst/ folder practices in AGENTS.md and update pkg_docs script ([63cada7](https://github.com/jimbrig/shinyhealth/commit/63cada79b50dea6ddefc6a7a16e45623152bbe28))  - (Jimmy Briggs)
