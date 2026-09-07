@@ -8,6 +8,7 @@
 
 ## Features
 
+- **healthcheck:** Implement comprehensive health check system ([06599d6](https://github.com/jimbrig/shinyhealth/commit/06599d6b2d563cccd0b0789d718c11094a837291))  - (Jimmy Briggs)
 - **package:** Implement core features and infrastructure ([7b721c7](https://github.com/jimbrig/shinyhealth/commit/7b721c7af6b39f33b115e97491aace0400f8dc8f))  - (Jimmy Briggs)
 - **package:** Define core package structure and dependencies ([05861f1](https://github.com/jimbrig/shinyhealth/commit/05861f179e8e07b7bedb8246023abd6e718e97c2))  - (Jimmy Briggs)
 - Implement initial package branding and setup scripts ([edf498a](https://github.com/jimbrig/shinyhealth/commit/edf498a8f2558ab16d1f5f5b5a21a22d195628de))  - (Jimmy Briggs)
