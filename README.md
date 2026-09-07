@@ -9,9 +9,9 @@
 [![R Universe Version](https://jimbrig.r-universe.dev/shinyhealth/badges/version)](https://jimbrig.r-universe.dev/shinyhealth)
 <!-- badges: end -->
 
-`shinyhealth` provides best practice, production-grade health check endpoints for R [Shiny][shiny] applications with a single function call.
+## Overview
 
-Deployment platforms ([Kubernetes][k8s-probes], [Google Cloud Run][cloudrun-probes], [Azure Container Apps][aca-probes], AWS load balancers, etc.) rely on HTTP health probes to decide whether your app is alive, ready for traffic, or needs a restart. Shiny has no native concept of a health endpoint -- `shinyhealth` adds one without a plumber sidecar, a second port, or any changes to your UI or server code.
+`shinyhealth` provides best practice, production-grade health check endpoints for R [Shiny][shiny] applications with a single function call.
 
 See the [package documentation site][docs] for full reference and articles.
 
@@ -22,6 +22,12 @@ You can install the development version of shinyhealth from [GitHub][repo] with:
 ``` r
 # install.packages("pak")
 pak::pak("jimbrig/shinyhealth")
+```
+
+or via [R Universe](https://jimbrig.r-universe.dev/shinyhealth) with:
+
+``` r
+install.packages('shinyhealth', repos = c('https://jimbrig.r-universe.dev', 'https://cloud.r-project.org'))
 ```
 
 ## Usage
