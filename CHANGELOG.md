@@ -24,6 +24,7 @@
 
 ## Testing
 
+- **healthcheck:** Add comprehensive unit tests for health check system ([da44866](https://github.com/jimbrig/shinyhealth/commit/da4486666af1b33af6c3e735cb1ca665897ee1dd))  - (Jimmy Briggs)
 - Set up testthat framework and initial unit test ([3938644](https://github.com/jimbrig/shinyhealth/commit/3938644fefc241e07fb7190afffede7408c1d274))  - (Jimmy Briggs)
 
 ***
