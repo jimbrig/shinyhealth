@@ -6,6 +6,10 @@
 
 ## [Unreleased]
 
+## Documentation
+
+- **pkgdown:** Set up automated package documentation site ([f4c5e01](https://github.com/jimbrig/shinyhealth/commit/f4c5e0137b72e9c491529e9feb6aee3085d76b6d))  - (Jimmy Briggs)
+
 ## Features
 
 - **healthcheck:** Implement comprehensive health check system ([06599d6](https://github.com/jimbrig/shinyhealth/commit/06599d6b2d563cccd0b0789d718c11094a837291))  - (Jimmy Briggs)
